@@ -1,0 +1,1838 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palácio da História - Sistema Mnemônico</title>
+    
+    <meta name="theme-color" content="#1a0f0a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=IM+Fell+DW+Pica&family=UnifrakturMaguntia&family=Source+Code+Pro:wght@300;400&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        /* ========== VARIÁVEIS E RESET ========== */
+        :root {
+            --parchment-dark: #1a0f0a;
+            --parchment-medium: #2c2416;
+            --parchment-light: #3d3526;
+            --ink-primary: #0a0805;
+            --ink-secondary: #1a150f;
+            --gold-leaf: #d4af37;
+            --gold-light: #e6c158;
+            --bronze: #8a6d4f;
+            --copper: #b55233;
+            --oxidized: #5d4a35;
+            --text-antique: #f5f0e6;
+            --text-faded: #a09988;
+            --shadow-deep: 0 8px 32px rgba(0, 0, 0, 0.5);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: 
+                linear-gradient(135deg, var(--parchment-dark) 0%, var(--parchment-medium) 30%, var(--parchment-light) 100%),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/></filter><rect width="200" height="200" filter="url(%23noise)" opacity="0.1"/></svg>');
+            color: var(--text-antique);
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-family: 'IM Fell DW Pica', serif;
+            position: relative;
+            padding-bottom: 120px; /* Espaço para o dashboard fixo */
+        }
+
+        /* Textura de papel envelhecido */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.03) 0%, transparent 20%),
+                radial-gradient(circle at 80% 70%, rgba(138, 109, 79, 0.02) 0%, transparent 20%),
+                linear-gradient(to right, transparent 98%, rgba(212, 175, 55, 0.1) 100%),
+                linear-gradient(to bottom, transparent 98%, rgba(212, 175, 55, 0.1) 100%);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        /* ========== HEADER PRINCIPAL ========== */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(26, 15, 10, 0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--bronze);
+            z-index: 1000;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-deep);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, var(--gold-leaf), var(--copper));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'UnifrakturMaguntia', cursive;
+            font-size: 1.5rem;
+            color: var(--parchment-dark);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .header-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--gold-leaf);
+            letter-spacing: 1px;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header-btn {
+            background: rgba(44, 36, 22, 0.8);
+            border: 1px solid var(--bronze);
+            color: var(--text-faded);
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1.2rem;
+        }
+
+        .header-btn:hover {
+            color: var(--gold-leaf);
+            border-color: var(--gold-leaf);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+        }
+
+        /* ========== CITAÇÃO DO DIA ========== */
+        .quote-container {
+            max-width: 800px;
+            margin: 80px auto 30px;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .daily-quote {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-faded);
+            font-style: italic;
+            line-height: 1.6;
+            padding: 20px;
+            border-top: 1px solid var(--bronze);
+            border-bottom: 1px solid var(--bronze);
+            position: relative;
+            animation: fadeIn 1s ease;
+        }
+
+        .daily-quote::before, .daily-quote::after {
+            content: '"';
+            font-family: 'UnifrakturMaguntia', cursive;
+            font-size: 2rem;
+            color: var(--gold-leaf);
+            position: absolute;
+            opacity: 0.5;
+        }
+
+        .daily-quote::before {
+            top: 5px;
+            left: 0;
+        }
+
+        .daily-quote::after {
+            bottom: 5px;
+            right: 0;
+        }
+
+        .quote-author {
+            display: block;
+            text-align: right;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: var(--gold-leaf);
+            font-style: normal;
+            font-family: 'IM Fell DW Pica', serif;
+        }
+
+        /* ========== TIMELINE INTERATIVA ========== */
+        .timeline-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .timeline-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: var(--gold-leaf);
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .timeline-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold-leaf), transparent);
+        }
+
+        .timeline {
+            background: rgba(26, 15, 10, 0.7);
+            border: 1px solid var(--bronze);
+            border-radius: 10px;
+            padding: 30px;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Source Code Pro', monospace;
+            color: var(--text-faded);
+            text-align: center;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .timeline-placeholder {
+            padding: 20px;
+        }
+
+        .timeline-placeholder i {
+            font-size: 2rem;
+            color: var(--bronze);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        /* ========== SEÇÕES DE CAPÍTULOS ========== */
+        .sections-container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--bronze);
+        }
+
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--parchment-medium), var(--oxidized));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--gold-leaf);
+            border: 1px solid var(--bronze);
+        }
+
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            color: var(--gold-light);
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .chapter-card {
+            background: linear-gradient(135deg, rgba(44, 36, 22, 0.9), rgba(26, 15, 10, 0.9));
+            border: 1px solid var(--bronze);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            min-height: 160px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .chapter-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold-leaf);
+            box-shadow: 
+                0 10px 25px rgba(212, 175, 55, 0.2),
+                inset 0 0 30px rgba(212, 175, 55, 0.05);
+        }
+
+        .chapter-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .chapter-card:hover::before {
+            left: 100%;
+        }
+
+        .chapter-number {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-family: 'UnifrakturMaguntia', cursive;
+            font-size: 1.8rem;
+            color: var(--gold-leaf);
+            font-weight: 400;
+        }
+
+        .progress-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 24px;
+            height: 24px;
+        }
+
+        .progress-circle {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .progress-circle-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-width: 2.5;
+        }
+
+        .progress-circle-fill {
+            fill: none;
+            stroke: var(--gold-leaf);
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .chapter-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--gold-leaf);
+            transition: var(--transition);
+        }
+
+        .chapter-card:hover .chapter-icon {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4));
+        }
+
+        .chapter-title {
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            color: var(--text-antique);
+            font-weight: 500;
+            line-height: 1.3;
+            margin-top: 5px;
+        }
+
+        /* ========== DASHBOARD FIXO INFERIOR ========== */
+        .dashboard-fixed {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(26, 15, 10, 0.95);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid var(--bronze);
+            z-index: 999;
+            padding: 15px 20px;
+            box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.5);
+            max-height: 120px;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .dashboard-fixed.expanded {
+            max-height: 400px;
+        }
+
+        .dashboard-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .dashboard-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            color: var(--gold-leaf);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s ease;
+            color: var(--gold-leaf);
+        }
+
+        .dashboard-fixed.expanded .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .stat-card {
+            background: rgba(44, 36, 22, 0.6);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .stat-value {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--gold-leaf);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-faded);
+            font-family: 'IM Fell DW Pica', serif;
+        }
+
+        .progress-visual {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 15px;
+            max-height: 150px;
+            overflow-y: auto;
+            padding-right: 5px;
+            justify-content: center;
+        }
+
+        .progress-dot {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: var(--text-faded);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+            border: 1px solid transparent;
+            font-family: 'IM Fell DW Pica', serif;
+        }
+
+        .progress-dot.studied {
+            background: var(--gold-leaf);
+            color: var(--parchment-dark);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+            border-color: var(--gold-light);
+        }
+
+        .progress-dot.in-progress {
+            background: var(--copper);
+            color: white;
+            box-shadow: 0 0 10px rgba(181, 82, 51, 0.4);
+            border-color: var(--copper);
+        }
+
+        .progress-dot:hover {
+            transform: scale(1.1);
+        }
+
+        .progress-dot:hover::after {
+            content: attr(data-title);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(44, 36, 22, 0.95);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            white-space: nowrap;
+            border: 1px solid var(--gold-leaf);
+            z-index: 100;
+            margin-bottom: 5px;
+            color: var(--text-antique);
+            font-family: 'Cinzel', serif;
+        }
+
+        /* ========== MODAL DE CAPÍTULO ========== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 5, 0, 0.97);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, var(--parchment-medium), var(--parchment-dark));
+            border-radius: 15px;
+            width: 95%;
+            max-width: 800px;
+            max-height: 85vh;
+            border: 2px solid var(--bronze);
+            overflow: hidden;
+            box-shadow: var(--shadow-deep);
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 20px;
+            background: rgba(26, 15, 10, 0.9);
+            border-bottom: 1px solid var(--bronze);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.4rem;
+            color: var(--gold-leaf);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-faded);
+            font-size: 1.8rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--gold-leaf);
+        }
+
+        .modal-body {
+            padding: 25px;
+            overflow-y: auto;
+            max-height: calc(85vh - 80px);
+        }
+
+        .modal-chart-container {
+            background: rgba(26, 15, 10, 0.5);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid var(--bronze);
+        }
+
+        .chart-title {
+            font-family: 'Cinzel', serif;
+            color: var(--gold-leaf);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 250px;
+            position: relative;
+        }
+
+        .chapter-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 12px 25px;
+            background: linear-gradient(45deg, var(--gold-leaf), var(--copper));
+            border: none;
+            border-radius: 8px;
+            color: var(--parchment-dark);
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            flex: 1;
+            min-width: 160px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 0.95rem;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .action-btn.secondary {
+            background: rgba(44, 36, 22, 0.9);
+            border: 1px solid var(--gold-leaf);
+            color: var(--gold-leaf);
+        }
+
+        /* ========== NOTIFICAÇÕES ========== */
+        .notification {
+            position: fixed;
+            bottom: 130px;
+            right: 20px;
+            background: rgba(44, 36, 22, 0.95);
+            border: 1px solid var(--gold-leaf);
+            border-left: 4px solid var(--gold-leaf);
+            border-radius: 8px;
+            padding: 15px 25px;
+            max-width: 350px;
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            box-shadow: var(--shadow-deep);
+            font-family: 'Cinzel', serif;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            border-left-color: var(--gold-leaf);
+        }
+
+        .notification.error {
+            border-left-color: var(--copper);
+        }
+
+        /* ========== ANIMAÇÕES ========== */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-in {
+            animation: slideIn 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        /* Delay para animação dos cards */
+        .chapter-card:nth-child(1) { animation-delay: 0.1s; }
+        .chapter-card:nth-child(2) { animation-delay: 0.15s; }
+        .chapter-card:nth-child(3) { animation-delay: 0.2s; }
+        .chapter-card:nth-child(4) { animation-delay: 0.25s; }
+        .chapter-card:nth-child(5) { animation-delay: 0.3s; }
+        .chapter-card:nth-child(6) { animation-delay: 0.35s; }
+        .chapter-card:nth-child(7) { animation-delay: 0.4s; }
+        .chapter-card:nth-child(8) { animation-delay: 0.45s; }
+        .chapter-card:nth-child(9) { animation-delay: 0.5s; }
+        .chapter-card:nth-child(10) { animation-delay: 0.55s; }
+
+        /* ========== RESPONSIVIDADE ========== */
+        @media (max-width: 1024px) {
+            .chapters-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 15px;
+            }
+            
+            .chapter-card {
+                min-height: 140px;
+                padding: 15px;
+            }
+            
+            .chapter-icon {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .quote-container {
+                margin-top: 70px;
+            }
+            
+            .daily-quote {
+                font-size: 1rem;
+                padding: 15px;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            
+            .section-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            
+            .section-title {
+                font-size: 1.4rem;
+            }
+            
+            .chapters-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 12px;
+            }
+            
+            .chapter-card {
+                min-height: 130px;
+                padding: 12px;
+            }
+            
+            .chapter-title {
+                font-size: 0.8rem;
+            }
+            
+            .dashboard-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .progress-dot {
+                width: 28px;
+                height: 28px;
+                font-size: 0.7rem;
+            }
+            
+            .chapter-actions {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                min-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header {
+                padding: 12px 15px;
+            }
+            
+            .header-title {
+                font-size: 1rem;
+            }
+            
+            .header-btn {
+                width: 36px;
+                height: 36px;
+            }
+            
+            .chapters-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .dashboard-fixed {
+                padding: 12px 15px;
+            }
+            
+            .progress-dot {
+                width: 26px;
+                height: 26px;
+                font-size: 0.65rem;
+            }
+            
+            .notification {
+                bottom: 120px;
+                right: 15px;
+                max-width: calc(100% - 30px);
+                padding: 12px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ========== HEADER ========== -->
+    <header class="main-header">
+        <div class="header-left">
+            <div class="logo">PH</div>
+            <div class="header-title">PALÁCIO DA HISTÓRIA</div>
+        </div>
+        <div class="header-right">
+            <button class="header-btn" onclick="toggleDashboard()" title="Alternar Dashboard">
+                <i class="fas fa-chart-pie"></i>
+            </button>
+            <button class="header-btn" onclick="resetAllProgress()" title="Resetar Progresso">
+                <i class="fas fa-redo"></i>
+            </button>
+            <button class="header-btn" onclick="exportProgress()" title="Exportar Dados">
+                <i class="fas fa-download"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- ========== CITAÇÃO DO DIA ========== -->
+    <div class="quote-container">
+        <div class="daily-quote" id="dailyQuote">
+            <!-- Citação será inserida via JavaScript -->
+        </div>
+    </div>
+
+    <!-- ========== TIMELINE INTERATIVA ========== -->
+    <div class="timeline-container">
+        <h2 class="timeline-title">LINHA DO TEMPO HISTÓRICA</h2>
+        <div class="timeline">
+            <div class="timeline-placeholder">
+                <i class="fas fa-history"></i>
+                <p>Linha do tempo interativa<br><small>Para ser preenchida conforme seus estudos</small></p>
+                <p style="margin-top: 10px; font-size: 0.85rem; color: var(--gold-leaf);">
+                    Clique em "Expandir Dashboard" abaixo para ver seu progresso
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SEÇÕES DE CAPÍTULOS ========== -->
+    <div class="sections-container">
+        <!-- Seção 1: Antiguidade -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="fas fa-pyramid"></i>
+                </div>
+                <h2 class="section-title">ERA ANTIGA</h2>
+            </div>
+            <div class="chapters-grid" id="section1"></div>
+        </section>
+        
+        <!-- Seção 2: Idade Média -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="fas fa-fortress"></i>
+                </div>
+                <h2 class="section-title">IDADE MÉDIA</h2>
+            </div>
+            <div class="chapters-grid" id="section2"></div>
+        </section>
+        
+        <!-- Seção 3: Idade Moderna -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="fas fa-ship"></i>
+                </div>
+                <h2 class="section-title">ERA MODERNA</h2>
+            </div>
+            <div class="chapters-grid" id="section3"></div>
+        </section>
+        
+        <!-- Seção 4: Idade Contemporânea -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="fas fa-globe-americas"></i>
+                </div>
+                <h2 class="section-title">ERA CONTEMPORÂNEA</h2>
+            </div>
+            <div class="chapters-grid" id="section4"></div>
+        </section>
+        
+        <!-- Seção 5: Brasil -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="fas fa-flag"></i>
+                </div>
+                <h2 class="section-title">HISTÓRIA DO BRASIL</h2>
+            </div>
+            <div class="chapters-grid" id="section5"></div>
+        </section>
+    </div>
+
+    <!-- ========== DASHBOARD FIXO INFERIOR ========== -->
+    <div class="dashboard-fixed" id="dashboardFixed">
+        <div class="dashboard-toggle" onclick="toggleDashboardExpanded()">
+            <div class="dashboard-title">
+                <i class="fas fa-scroll"></i>
+                PERGAMINHO DO PROGRESSO
+            </div>
+            <div class="toggle-icon">
+                <i class="fas fa-chevron-up"></i>
+            </div>
+        </div>
+        
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <div class="stat-value" id="totalProgress">0%</div>
+                <div class="stat-label">Progresso Total</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="chaptersStudied">0/54</div>
+                <div class="stat-label">Capítulos Estudados</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalTime">0h</div>
+                <div class="stat-label">Tempo de Estudo</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="daysActive">1</div>
+                <div class="stat-label">Dias Ativos</div>
+            </div>
+        </div>
+
+        <div class="progress-visual" id="progressVisual">
+            <!-- Pontos de progresso serão gerados por JavaScript -->
+        </div>
+    </div>
+
+    <!-- ========== MODAL DE CAPÍTULO ========== -->
+    <div class="modal" id="chapterModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-book-open"></i>
+                    <span id="modalChapterTitle">Carregando...</span>
+                </div>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <div class="modal-chart-container">
+                    <div class="chart-title">
+                        <i class="fas fa-chart-line"></i>
+                        Progresso do Capítulo
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="chapterChart"></canvas>
+                    </div>
+                </div>
+                
+                <div id="chapterContent">
+                    <!-- Conteúdo será carregado dinamicamente -->
+                </div>
+                
+                <div class="chapter-actions">
+                    <button class="action-btn" id="openChapterBtn">
+                        <i class="fas fa-external-link-alt"></i>
+                        Abrir Capítulo
+                    </button>
+                    <button class="action-btn secondary" id="markAsStudiedBtn">
+                        <i class="fas fa-check-circle"></i>
+                        Marcar como Estudado
+                    </button>
+                    <button class="action-btn secondary" id="resetProgressBtn">
+                        <i class="fas fa-redo"></i>
+                        Reiniciar Progresso
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== NOTIFICAÇÃO ========== -->
+    <div class="notification" id="notification"></div>
+
+    <script>
+        // ========== CONFIGURAÇÃO INICIAL ==========
+        let globalProgress = {
+            total: 0,
+            studied: 0,
+            inProgress: 0,
+            timeSpent: 0, // em minutos
+            daysActive: 1
+        };
+
+        let currentChapter = null;
+        let chapterChart = null;
+        let lastVisitDate = null;
+
+        // Dados dos capítulos - mantendo os 54 capítulos originais
+        const chaptersData = [
+            // ERA ANTIGA (1-10)
+            { number: "01", title: "Origem do Homem", icon: "🦍", section: 1, chapter: "capitulo-01.html" },
+            { number: "02", title: "Crescente Fértil", icon: "🌾", section: 1, chapter: "capitulo-02.html" },
+            { number: "03", title: "Império dos Faraós", icon: "👑", section: 1, chapter: "capitulo-03.html" },
+            { number: "04", title: "Mesopotâmia", icon: "🏺", section: 1, chapter: "capitulo-04.html" },
+            { number: "05", title: "Hebreus", icon: "📖", section: 1, chapter: "capitulo-05.html" },
+            { number: "06", title: "Mediterrâneo", icon: "⚓", section: 1, chapter: "capitulo-06.html" },
+            { number: "07", title: "Extremo Oriente", icon: "🎎", section: 1, chapter: "capitulo-07.html" },
+            { number: "08", title: "Grécia", icon: "🏛️", section: 1, chapter: "capitulo-08.html" },
+            { number: "09", title: "Roma", icon: "⚔️", section: 1, chapter: "capitulo-09.html" },
+            { number: "10", title: "Império Bizantino", icon: "⛪", section: 1, chapter: "capitulo-10.html" },
+            
+            // IDADE MÉDIA (11-20)
+            { number: "11", title: "Revelação do Profeta", icon: "☪️", section: 2, chapter: "capitulo-11.html" },
+            { number: "12", title: "Povos Bárbaros", icon: "🛡️", section: 2, chapter: "capitulo-12.html" },
+            { number: "13", title: "Ascensão dos Francos", icon: "⚜️", section: 2, chapter: "capitulo-13.html" },
+            { number: "14", title: "Igreja e Império", icon: "✝️", section: 2, chapter: "capitulo-14.html" },
+            { number: "15", title: "Sistema Feudal", icon: "🏰", section: 2, chapter: "capitulo-15.html" },
+            { number: "16", title: "Cruzadas", icon: "✝️", section: 2, chapter: "capitulo-16.html" },
+            { number: "17", title: "Transformação Feudal", icon: "🔄", section: 2, chapter: "capitulo-17.html" },
+            { number: "18", title: "Monarquias Nacionais", icon: "👑", section: 2, chapter: "capitulo-18.html" },
+            { number: "19", title: "Crises do Século XIV", icon: "💀", section: 2, chapter: "capitulo-19.html" },
+            { number: "20", title: "Civilizações Medievais", icon: "🌏", section: 2, chapter: "capitulo-20.html" },
+            
+            // ERA MODERNA (21-35)
+            { number: "21", title: "Pré-Colombianos", icon: "🌵", section: 3, chapter: "capitulo-21.html" },
+            { number: "22", title: "Transição Capitalista", icon: "💰", section: 3, chapter: "capitulo-22.html" },
+            { number: "23", title: "Reformas Religiosas", icon: "⛪", section: 3, chapter: "capitulo-23.html" },
+            { number: "24", title: "Grandes Navegações", icon: "🚢", section: 3, chapter: "capitulo-24.html" },
+            { number: "25", title: "Espanhóis na América", icon: "🏹", section: 3, chapter: "capitulo-25.html" },
+            { number: "26", title: "Descobrimento do Brasil", icon: "🇧🇷", section: 3, chapter: "capitulo-26.html" },
+            { number: "27", title: "Colonização", icon: "🏘️", section: 3, chapter: "capitulo-27.html" },
+            { number: "28", title: "Mercantilismo", icon: "⚖️", section: 3, chapter: "capitulo-28.html" },
+            { number: "29", title: "Absolutismo", icon: "👑", section: 3, chapter: "capitulo-29.html" },
+            { number: "30", title: "Relações Internacionais", icon: "🤝", section: 3, chapter: "capitulo-30.html" },
+            { number: "31", title: "Iluminismo e EUA", icon: "🗽", section: 3, chapter: "capitulo-31.html" },
+            { number: "32", title: "Revolução Francesa", icon: "⚜️", section: 3, chapter: "capitulo-32.html" },
+            { number: "33", title: "Ciclo do Ouro", icon: "💰", section: 3, chapter: "capitulo-33.html" },
+            { number: "34", title: "Revoltas Coloniais", icon: "⚔️", section: 3, chapter: "capitulo-34.html" },
+            { number: "35", title: "Império Napoleônico", icon: "🎖️", section: 3, chapter: "capitulo-35.html" },
+            
+            // ERA CONTEMPORÂNEA (36-45)
+            { number: "36", title: "Independência do Brasil", icon: "🗡️", section: 4, chapter: "capitulo-36.html" },
+            { number: "37", title: "Movimentos Sociais", icon: "👥", section: 4, chapter: "capitulo-37.html" },
+            { number: "38", title: "Unificação Itália/Alemanha", icon: "🇪🇺", section: 4, chapter: "capitulo-38.html" },
+            { number: "39", title: "Guerra de Secessão", icon: "🇺🇸", section: 4, chapter: "capitulo-39.html" },
+            { number: "40", title: "Primeiro Reinado", icon: "👑", section: 4, chapter: "capitulo-40.html" },
+            { number: "41", title: "Período Regencial", icon: "⚖️", section: 4, chapter: "capitulo-41.html" },
+            { number: "42", title: "Segundo Reinado", icon: "👑", section: 4, chapter: "capitulo-42.html" },
+            { number: "43", title: "Imperialismo", icon: "🌍", section: 4, chapter: "capitulo-43.html" },
+            { number: "44", title: "Partilha África/Ásia", icon: "🗺️", section: 4, chapter: "capitulo-44.html" },
+            { number: "45", title: "Hegemonia Britânica", icon: "🇬🇧", section: 4, chapter: "capitulo-45.html" },
+            
+            // HISTÓRIA DO BRASIL (46-54)
+            { number: "46", title: "Avanços Científicos", icon: "🔬", section: 5, chapter: "capitulo-46.html" },
+            { number: "47", title: "Proclamação da República", icon: "🇧🇷", section: 5, chapter: "capitulo-47.html" },
+            { number: "48", title: "Café com Leite", icon: "☕", section: 5, chapter: "capitulo-48.html" },
+            { number: "49", title: "Guerras Mundiais", icon: "⚔️", section: 5, chapter: "capitulo-49.html" },
+            { number: "50", title: "Período Entre Guerras", icon: "⏳", section: 5, chapter: "capitulo-50.html" },
+            { number: "51", title: "Regimes Totalitários", icon: "⚖️", section: 5, chapter: "capitulo-51.html" },
+            { number: "52", title: "Crise de 1929", icon: "📉", section: 5, chapter: "capitulo-52.html" },
+            { number: "53", title: "Nazismo e 2ª Guerra", icon: "卐", section: 5, chapter: "capitulo-53.html" },
+            { number: "54", title: "Mundo Contemporâneo", icon: "🌐", section: 5, chapter: "capitulo-54.html" }
+        ];
+
+        // Citações históricas (mantidas do original)
+        const historicalQuotes = [
+            {
+                texto: "A história é testemunha dos tempos, luz da verdade, vida da memória, mestra da vida.",
+                autor: "Cícero",
+                dia: 0
+            },
+            {
+                texto: "Quem não conhece a história está condenado a repeti-la.",
+                autor: "George Santayana",
+                dia: 1
+            },
+            {
+                texto: "A história é um profeta com o olhar voltado para trás.",
+                autor: "Eduardo Galeano",
+                dia: 2
+            },
+            {
+                texto: "A história se repete, a primeira vez como tragédia, a segunda como farsa.",
+                autor: "Karl Marx",
+                dia: 3
+            },
+            {
+                texto: "O estudo da história é o começo da sabedoria política.",
+                autor: "Jean Bodin",
+                dia: 4
+            },
+            {
+                texto: "A história é a essência de inúmeras biografias.",
+                autor: "Thomas Carlyle",
+                dia: 5
+            },
+            {
+                texto: "O que é a história senão uma fábula aceita por todos?",
+                autor: "Napoleão Bonaparte",
+                dia: 6
+            }
+        ];
+
+        // ========== INICIALIZAÇÃO ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("📜 PALÁCIO DA HISTÓRIA - Sistema carregado!");
+            
+            // Configurar data da última visita
+            setupVisitTracking();
+            
+            // Carregar citação do dia
+            loadDailyQuote();
+            
+            // Carregar progresso salvo
+            loadAllProgress();
+            
+            // Renderizar capítulos
+            renderChapters();
+            
+            // Atualizar dashboard
+            updateDashboard();
+            
+            // Configurar event listeners
+            setupEventListeners();
+            
+            // Otimizar para mobile
+            optimizeForMobile();
+            
+            // Mostrar notificação inicial
+            setTimeout(() => {
+                showNotification('Sistema Mnemônico Histórico inicializado!', 'success');
+            }, 1000);
+        });
+
+        // ========== CITAÇÃO DO DIA ==========
+        function loadDailyQuote() {
+            const today = new Date();
+            const dayOfWeek = today.getDay();
+            
+            // Buscar citação específica do dia
+            let quote = historicalQuotes.find(q => q.dia === dayOfWeek);
+            
+            // Se não houver citação para o dia, pegar uma aleatória
+            if (!quote) {
+                const randomIndex = Math.floor(Math.random() * historicalQuotes.length);
+                quote = historicalQuotes[randomIndex];
+            }
+            
+            const quoteElement = document.getElementById('dailyQuote');
+            if (quoteElement) {
+                quoteElement.innerHTML = `
+                    ${quote.texto}
+                    <span class="quote-author">— ${quote.autor}</span>
+                `;
+            }
+        }
+
+        // ========== RASTREAMENTO DE VISITAS ==========
+        function setupVisitTracking() {
+            const today = new Date().toDateString();
+            lastVisitDate = localStorage.getItem('palacio_last_visit');
+            
+            if (!lastVisitDate) {
+                // Primeira visita
+                localStorage.setItem('palacio_first_visit', today);
+                localStorage.setItem('palacio_last_visit', today);
+                localStorage.setItem('palacio_visit_count', '1');
+            } else if (lastVisitDate !== today) {
+                // Nova visita em dia diferente
+                const count = parseInt(localStorage.getItem('palacio_visit_count') || '0') + 1;
+                localStorage.setItem('palacio_visit_count', count.toString());
+                localStorage.setItem('palacio_last_visit', today);
+                
+                // Atualizar dias ativos
+                globalProgress.daysActive = count;
+            }
+        }
+
+        // ========== RENDERIZAR CAPÍTULOS ==========
+        function renderChapters() {
+            const sections = [
+                document.getElementById('section1'),
+                document.getElementById('section2'),
+                document.getElementById('section3'),
+                document.getElementById('section4'),
+                document.getElementById('section5')
+            ];
+            
+            // Limpar seções
+            sections.forEach(section => {
+                if (section) section.innerHTML = '';
+            });
+            
+            // Renderizar cada capítulo
+            chaptersData.forEach(chapter => {
+                const progress = getChapterProgress(chapter.number);
+                const card = createChapterCard(chapter, progress);
+                
+                if (chapter.section >= 1 && chapter.section <= 5 && sections[chapter.section - 1]) {
+                    sections[chapter.section - 1].appendChild(card);
+                }
+            });
+            
+            // Atualizar visualização de progresso
+            updateProgressVisual();
+        }
+
+        function createChapterCard(chapter, progress) {
+            const card = document.createElement('div');
+            card.className = 'chapter-card slide-in';
+            card.dataset.chapterNumber = chapter.number;
+            
+            // Calcular percentual
+            const percent = calculateProgressPercent(progress);
+            
+            card.innerHTML = `
+                <div class="chapter-number">${chapter.number}</div>
+                
+                <div class="progress-indicator">
+                    <svg class="progress-circle" viewBox="0 0 36 36">
+                        <path class="progress-circle-bg" d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                        <path class="progress-circle-fill" 
+                            stroke-dasharray="${percent}, 100"
+                            d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                    </svg>
+                </div>
+                
+                <div class="chapter-icon">${chapter.icon}</div>
+                <div class="chapter-title">${chapter.title}</div>
+            `;
+            
+            // Adicionar classe de status ao card
+            if (percent >= 100) {
+                card.classList.add('studied');
+            } else if (percent > 0) {
+                card.classList.add('in-progress');
+            }
+            
+            // Event listener para abrir modal
+            card.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openChapterModal(chapter);
+            });
+            
+            return card;
+        }
+
+        // ========== SISTEMA DE PROGRESSO ==========
+        function loadAllProgress() {
+            globalProgress = {
+                total: 0,
+                studied: 0,
+                inProgress: 0,
+                timeSpent: 0,
+                daysActive: parseInt(localStorage.getItem('palacio_visit_count') || '1')
+            };
+            
+            // Carregar progresso de cada capítulo do localStorage
+            chaptersData.forEach(chapter => {
+                const saved = localStorage.getItem(`palacio_chapter_${chapter.number}`);
+                if (saved) {
+                    try {
+                        const progress = JSON.parse(saved);
+                        
+                        // Calcular progresso geral
+                        if (progress.completed) {
+                            globalProgress.studied++;
+                        } else if (progress.timeSpent && progress.timeSpent > 0) {
+                            globalProgress.inProgress++;
+                        }
+                        
+                        // Somar tempo
+                        if (progress.timeSpent) {
+                            globalProgress.timeSpent += progress.timeSpent;
+                        }
+                    } catch (e) {
+                        console.error(`Erro ao carregar progresso do capítulo ${chapter.number}:`, e);
+                    }
+                }
+            });
+            
+            // Calcular progresso total
+            globalProgress.total = Math.round((globalProgress.studied / chaptersData.length) * 100);
+        }
+
+        function getChapterProgress(chapterNumber) {
+            const saved = localStorage.getItem(`palacio_chapter_${chapterNumber}`);
+            if (saved) {
+                try {
+                    return JSON.parse(saved);
+                } catch (e) {
+                    return { completed: false, timeSpent: 0 };
+                }
+            }
+            return { completed: false, timeSpent: 0 };
+        }
+
+        function calculateProgressPercent(progress) {
+            if (progress.completed) return 100;
+            if (progress.timeSpent > 0) {
+                // Assumindo que 60 minutos = 100% de progresso
+                return Math.min(Math.round((progress.timeSpent / 60) * 100), 99);
+            }
+            return 0;
+        }
+
+        function updateChapterProgress(chapterNumber, progressData) {
+            const current = getChapterProgress(chapterNumber);
+            const updated = { 
+                ...current, 
+                ...progressData, 
+                lastUpdated: new Date().toISOString() 
+            };
+            
+            localStorage.setItem(`palacio_chapter_${chapterNumber}`, JSON.stringify(updated));
+            
+            // Recarregar e atualizar interface
+            loadAllProgress();
+            updateDashboard();
+            renderChapters();
+        }
+
+        // ========== DASHBOARD ==========
+        function toggleDashboard() {
+            const dashboard = document.getElementById('dashboardFixed');
+            if (!dashboard) return;
+            
+            // Alternar visibilidade
+            if (dashboard.style.display === 'none') {
+                dashboard.style.display = 'block';
+                updateDashboard();
+                showNotification('Pergaminho do Progresso ativado', 'info');
+            } else {
+                dashboard.style.display = 'none';
+                showNotification('Pergaminho do Progresso recolhido', 'info');
+            }
+        }
+
+        function toggleDashboardExpanded() {
+            const dashboard = document.getElementById('dashboardFixed');
+            if (dashboard) {
+                dashboard.classList.toggle('expanded');
+            }
+        }
+
+        function updateDashboard() {
+            // Atualizar estatísticas
+            const totalProgressElem = document.getElementById('totalProgress');
+            const chaptersStudiedElem = document.getElementById('chaptersStudied');
+            const totalTimeElem = document.getElementById('totalTime');
+            const daysActiveElem = document.getElementById('daysActive');
+            
+            if (totalProgressElem) totalProgressElem.textContent = `${globalProgress.total}%`;
+            if (chaptersStudiedElem) chaptersStudiedElem.textContent = `${globalProgress.studied}/${chaptersData.length}`;
+            if (totalTimeElem) totalTimeElem.textContent = `${Math.round(globalProgress.timeSpent / 60)}h`;
+            if (daysActiveElem) daysActiveElem.textContent = `${globalProgress.daysActive}`;
+        }
+
+        function updateProgressVisual() {
+            const container = document.getElementById('progressVisual');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            chaptersData.forEach(chapter => {
+                const progress = getChapterProgress(chapter.number);
+                const percent = calculateProgressPercent(progress);
+                
+                const dot = document.createElement('div');
+                dot.className = 'progress-dot';
+                dot.textContent = chapter.number;
+                dot.dataset.title = `Cap. ${chapter.number}: ${chapter.title} - ${percent}%`;
+                
+                if (percent >= 100) {
+                    dot.classList.add('studied');
+                } else if (percent > 0) {
+                    dot.classList.add('in-progress');
+                }
+                
+                dot.addEventListener('click', () => {
+                    const chapterObj = chaptersData.find(c => c.number === chapter.number);
+                    if (chapterObj) openChapterModal(chapterObj);
+                });
+                
+                container.appendChild(dot);
+            });
+        }
+
+        // ========== MODAL DE CAPÍTULO ==========
+        function openChapterModal(chapter) {
+            try {
+                currentChapter = chapter;
+                
+                // Atualizar título
+                const modalTitle = document.getElementById('modalChapterTitle');
+                if (modalTitle) {
+                    modalTitle.textContent = `Capítulo ${chapter.number} - ${chapter.title}`;
+                }
+                
+                // Atualizar conteúdo
+                const content = document.getElementById('chapterContent');
+                if (content) {
+                    content.innerHTML = `
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <div style="font-size: 4rem; margin-bottom: 10px;">${chapter.icon}</div>
+                            <h3 style="color: var(--gold-leaf); margin-bottom: 10px; font-family: 'Cinzel', serif;">${chapter.title}</h3>
+                            <p style="color: var(--text-faded);">Capítulo ${chapter.number} de 54</p>
+                        </div>
+                        
+                        <div style="background: rgba(26, 15, 10, 0.5); padding: 15px; border-radius: 10px; margin: 20px 0; border: 1px solid var(--bronze);">
+                            <h4 style="color: var(--gold-leaf); margin-bottom: 10px; font-family: 'Cinzel', serif;">
+                                <i class="fas fa-scroll"></i> Informações do Capítulo
+                            </h4>
+                            <p style="color: var(--text-faded); line-height: 1.6; font-size: 0.95rem;">
+                                Este capítulo aborda os principais eventos históricos relacionados a <strong>${chapter.title.toLowerCase()}</strong>. 
+                                Utilize o sistema mnemônico para maximizar sua retenção de conhecimento histórico.
+                            </p>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0;">
+                            <div style="background: rgba(26, 15, 10, 0.3); padding: 12px; border-radius: 8px; text-align: center;">
+                                <div style="color: var(--gold-leaf); font-size: 0.9rem; margin-bottom: 5px;">Status</div>
+                                <div style="color: var(--text-antique); font-family: 'Cinzel', serif; font-size: 1.1rem;" id="modalStatus">
+                                    ${getChapterProgress(chapter.number).completed ? 'Estudado' : 'Não Iniciado'}
+                                </div>
+                            </div>
+                            <div style="background: rgba(26, 15, 10, 0.3); padding: 12px; border-radius: 8px; text-align: center;">
+                                <div style="color: var(--gold-leaf); font-size: 0.9rem; margin-bottom: 5px;">Tempo de Estudo</div>
+                                <div style="color: var(--text-antique); font-family: 'Cinzel', serif; font-size: 1.1rem;" id="modalTime">
+                                    ${Math.round(getChapterProgress(chapter.number).timeSpent / 60)}h
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Atualizar botões de ação
+                const openBtn = document.getElementById('openChapterBtn');
+                const markBtn = document.getElementById('markAsStudiedBtn');
+                const resetBtn = document.getElementById('resetProgressBtn');
+                
+                if (openBtn) {
+                    openBtn.onclick = () => openChapterWindow(chapter);
+                }
+                
+                if (markBtn) {
+                    markBtn.onclick = () => markAsStudied(chapter);
+                }
+                
+                if (resetBtn) {
+                    resetBtn.onclick = () => resetChapterProgress(chapter);
+                }
+                
+                // Atualizar gráfico do capítulo
+                updateChapterChart(chapter.number);
+                
+                // Mostrar modal
+                const modal = document.getElementById('chapterModal');
+                if (modal) {
+                    modal.classList.add('active');
+                }
+                
+            } catch (error) {
+                console.error('Erro ao abrir modal:', error);
+                showNotification('Erro ao abrir o capítulo', 'error');
+            }
+        }
+
+        function updateChapterChart(chapterNumber) {
+            try {
+                const progress = getChapterProgress(chapterNumber);
+                const canvas = document.getElementById('chapterChart');
+                
+                if (!canvas) {
+                    console.error('Canvas do gráfico não encontrado');
+                    return;
+                }
+                
+                const ctx = canvas.getContext('2d');
+                
+                // Destruir gráfico anterior se existir
+                if (chapterChart) {
+                    chapterChart.destroy();
+                }
+                
+                const percent = calculateProgressPercent(progress);
+                const remaining = 100 - percent;
+                
+                chapterChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Concluído', 'Restante'],
+                        datasets: [{
+                            data: [percent, remaining],
+                            backgroundColor: [
+                                'rgba(212, 175, 55, 0.8)',
+                                'rgba(138, 109, 79, 0.3)'
+                            ],
+                            borderColor: [
+                                'rgba(212, 175, 55, 1)',
+                                'rgba(138, 109, 79, 0.5)'
+                            ],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '70%',
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: 'rgba(245, 240, 230, 0.9)',
+                                    padding: 15,
+                                    font: {
+                                        size: 12,
+                                        family: "'IM Fell DW Pica', serif"
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.label}: ${context.raw}%`;
+                                    }
+                                },
+                                backgroundColor: 'rgba(26, 15, 10, 0.9)',
+                                titleColor: 'rgba(212, 175, 55, 1)',
+                                bodyColor: 'rgba(245, 240, 230, 0.9)'
+                            }
+                        }
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Erro ao criar gráfico:', error);
+            }
+        }
+
+        function markAsStudied(chapter) {
+            if (!chapter) chapter = currentChapter;
+            if (!chapter) return;
+            
+            if (confirm(`Marcar "${chapter.title}" como completamente estudado?`)) {
+                updateChapterProgress(chapter.number, {
+                    completed: true,
+                    timeSpent: 60, // 1 hora como padrão
+                    markedAsStudied: true,
+                    lastStudied: new Date().toISOString()
+                });
+                
+                showNotification(`Capítulo ${chapter.number} marcado como estudado!`, 'success');
+                
+                // Atualizar gráfico no modal
+                if (currentChapter && currentChapter.number === chapter.number) {
+                    updateChapterChart(chapter.number);
+                    
+                    // Atualizar status no modal
+                    const statusElem = document.getElementById('modalStatus');
+                    const timeElem = document.getElementById('modalTime');
+                    if (statusElem) statusElem.textContent = 'Estudado';
+                    if (timeElem) timeElem.textContent = '1h';
+                }
+            }
+        }
+
+        function resetChapterProgress(chapter) {
+            if (!chapter) chapter = currentChapter;
+            if (!chapter) return;
+            
+            if (confirm(`Reiniciar todo o progresso do capítulo ${chapter.number}?`)) {
+                localStorage.removeItem(`palacio_chapter_${chapter.number}`);
+                
+                showNotification(`Progresso do capítulo ${chapter.number} resetado!`, 'info');
+                
+                // Recarregar tudo
+                loadAllProgress();
+                updateDashboard();
+                renderChapters();
+                
+                // Atualizar gráfico no modal
+                if (currentChapter && currentChapter.number === chapter.number) {
+                    updateChapterChart(chapter.number);
+                    
+                    // Atualizar status no modal
+                    const statusElem = document.getElementById('modalStatus');
+                    const timeElem = document.getElementById('modalTime');
+                    if (statusElem) statusElem.textContent = 'Não Iniciado';
+                    if (timeElem) timeElem.textContent = '0h';
+                }
+            }
+        }
+
+        function openChapterWindow(chapter) {
+            if (!chapter && currentChapter) chapter = currentChapter;
+            if (!chapter) return;
+            
+            // Fechar modal
+            const modal = document.getElementById('chapterModal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+            
+            // Registrar acesso
+            const currentProgress = getChapterProgress(chapter.number);
+            updateChapterProgress(chapter.number, {
+                lastAccessed: new Date().toISOString(),
+                accessCount: (currentProgress.accessCount || 0) + 1
+            });
+            
+            // Abrir em nova janela
+            setTimeout(() => {
+                window.open(chapter.chapter, '_blank', 'width=800,height=600,scrollbars=yes');
+            }, 300);
+        }
+
+        // ========== FUNÇÕES UTILITÁRIAS ==========
+        function resetAllProgress() {
+            if (confirm('Tem certeza que deseja resetar TODO o progresso de TODOS os capítulos?')) {
+                // Remover todos os dados de progresso
+                for (let i = 1; i <= 54; i++) {
+                    const num = i.toString().padStart(2, '0');
+                    localStorage.removeItem(`palacio_chapter_${num}`);
+                }
+                
+                // Resetar variáveis globais
+                globalProgress = {
+                    total: 0,
+                    studied: 0,
+                    inProgress: 0,
+                    timeSpent: 0,
+                    daysActive: parseInt(localStorage.getItem('palacio_visit_count') || '1')
+                };
+                
+                // Recarregar interface
+                loadAllProgress();
+                updateDashboard();
+                renderChapters();
+                
+                showNotification('Todo o progresso foi resetado!', 'info');
+            }
+        }
+
+        function exportProgress() {
+            const exportData = {
+                system: 'Palácio da História',
+                version: '2.0',
+                exportDate: new Date().toISOString(),
+                globalProgress: globalProgress,
+                chapters: []
+            };
+            
+            // Coletar dados de cada capítulo
+            chaptersData.forEach(chapter => {
+                const progress = getChapterProgress(chapter.number);
+                exportData.chapters.push({
+                    number: chapter.number,
+                    title: chapter.title,
+                    progress: progress
+                });
+            });
+            
+            // Criar e baixar arquivo
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `palacio_historia_progresso_${new Date().toISOString().slice(0,10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            showNotification('Pergaminho de progresso exportado com sucesso!', 'success');
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            if (!notification) return;
+            
+            // Resetar classes
+            notification.className = 'notification';
+            
+            // Adicionar classe de tipo
+            notification.classList.add(type);
+            
+            // Adicionar ícone
+            let icon = '📜';
+            if (type === 'success') icon = '✅';
+            else if (type === 'error') icon = '❌';
+            else if (type === 'warning') icon = '⚠️';
+            
+            notification.innerHTML = `${icon} ${message}`;
+            notification.classList.add('show');
+            
+            // Remover após 4 segundos
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 4000);
+        }
+
+        function optimizeForMobile() {
+            // Aumentar áreas de toque
+            document.querySelectorAll('button, .chapter-card, .progress-dot, .action-btn, .dashboard-toggle').forEach(el => {
+                el.style.minHeight = '44px';
+                el.style.minWidth = '44px';
+            });
+            
+            // Configurar scroll suave
+            document.documentElement.style.cssText += `
+                -webkit-overflow-scrolling: touch;
+                overscroll-behavior: none;
+                touch-action: manipulation;
+            `;
+            
+            // Detectar mobile/WebView
+            if (/Mobile|Android|iPhone|iPad|iPod/.test(navigator.userAgent)) {
+                console.log('📱 Modo mobile otimizado ativado');
+                
+                // Prevenir zoom em double-tap
+                document.addEventListener('touchstart', function(event) {
+                    if (event.touches.length > 1) {
+                        event.preventDefault();
+                    }
+                }, { passive: false });
+            }
+        }
+
+        function setupEventListeners() {
+            // Fechar modal
+            const closeBtn = document.getElementById('closeModal');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => {
+                    const modal = document.getElementById('chapterModal');
+                    if (modal) {
+                        modal.classList.remove('active');
+                    }
+                });
+            }
+            
+            // Fechar modal ao clicar fora
+            const modal = document.getElementById('chapterModal');
+            if (modal) {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.classList.remove('active');
+                    }
+                });
+            }
+            
+            // Atalhos de teclado
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    const modal = document.getElementById('chapterModal');
+                    if (modal) {
+                        modal.classList.remove('active');
+                    }
+                }
+                
+                // Ctrl+E para exportar
+                if (e.ctrlKey && e.key === 'e') {
+                    e.preventDefault();
+                    exportProgress();
+                }
+                
+                // Ctrl+R para resetar
+                if (e.ctrlKey && e.key === 'r') {
+                    e.preventDefault();
+                    resetAllProgress();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
