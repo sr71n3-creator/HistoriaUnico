@@ -1,0 +1,2082 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capítulo 01 - A Alvorada da Humanidade | Palácio da História</title>
+    
+    <meta name="theme-color" content="#2c1e0f">
+    <meta name="description" content="Explore as origens da humanidade: dos primeiros hominídeos às primeiras civilizações. Uma jornada interativa pela Pré-História.">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Eagle+Lake&family=Caveat:wght@400;500;600;700&family=Rock+Salt&family=MedievalSharp&family=IM+Fell+DW+Pica&display=swap" rel="stylesheet">
+    
+    <!-- Biblioteca para partículas (opcional) -->
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.3.4/tsparticles.bundle.min.js"></script>
+    
+    <style>
+        /* ===== VARIÁVEIS E RESET ===== */
+        :root {
+            --cave-dark: #1a130d;
+            --cave-medium: #2c1e0f;
+            --cave-light: #3d2c1a;
+            --earth-red: #8a3324;
+            --clay-orange: #b55233;
+            --ochre-primary: #d4a76a;
+            --ochre-secondary: #c99a5f;
+            --ochre-light: #e8d8a8;
+            --stone-gray: #7a6d5f;
+            --charcoal: #3d3526;
+            --fire-glow: #ff6b35;
+            --fire-light: #ff8c42;
+            --text-primitive: #f5e9d9;
+            --text-faded: #a8997d;
+            --shadow-deep: 0 10px 30px rgba(0, 0, 0, 0.7);
+            --shadow-glow: 0 0 20px rgba(255, 107, 53, 0.4);
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'IM Fell DW Pica', serif;
+            background: 
+                /* Textura de parede de caverna */
+                radial-gradient(ellipse at 20% 30%, rgba(138, 109, 79, 0.15) 0%, transparent 35%),
+                radial-gradient(ellipse at 80% 70%, rgba(181, 147, 107, 0.1) 0%, transparent 35%),
+                radial-gradient(ellipse at 40% 80%, rgba(106, 81, 56, 0.2) 0%, transparent 35%),
+                /* Base principal */
+                linear-gradient(135deg, var(--cave-dark) 0%, var(--cave-medium) 30%, var(--cave-light) 100%);
+            color: var(--text-primitive);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="12" fill="%23d4a76a" opacity="0.7"/><circle cx="16" cy="16" r="6" fill="%23ff6b35" opacity="0.9"/></svg>'), auto;
+        }
+
+        /* Efeito de profundidade de caverna */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 15% 25%, transparent 10%, rgba(0, 0, 0, 0.2) 20%, transparent 30%),
+                radial-gradient(circle at 85% 75%, transparent 10%, rgba(0, 0, 0, 0.15) 20%, transparent 30%),
+                radial-gradient(circle at 50% 50%, transparent 5%, rgba(0, 0, 0, 0.1) 15%, transparent 25%);
+            background-size: 300px 300px;
+            pointer-events: none;
+            z-index: -1;
+            animation: caveBreathe 20s infinite alternate;
+        }
+
+        @keyframes caveBreathe {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        /* ===== ANIMAÇÃO DE ENTRADA ===== */
+        .cave-entrance {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--cave-dark);
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: fadeOut 2s ease-in-out 3s forwards;
+        }
+
+        .torch-animation {
+            position: relative;
+            width: 60px;
+            height: 200px;
+            margin-bottom: 40px;
+        }
+
+        .torch-handle {
+            width: 20px;
+            height: 150px;
+            background: linear-gradient(to bottom, #8a6d4f, #5d4a35);
+            margin: 0 auto;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .torch-flame {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 80px;
+            background: radial-gradient(circle at 50% 0%, var(--fire-light), var(--fire-glow) 70%, transparent);
+            border-radius: 50% 50% 20% 20%;
+            filter: blur(5px);
+            animation: torchFlicker 0.8s infinite alternate;
+        }
+
+        @keyframes torchFlicker {
+            0%, 100% { 
+                transform: translateX(-50%) scaleY(1);
+                height: 80px;
+                filter: blur(5px);
+            }
+            50% { 
+                transform: translateX(-50%) scaleY(1.1) translateX(3px);
+                height: 90px;
+                filter: blur(8px);
+            }
+        }
+
+        .entrance-text {
+            font-family: 'Eagle Lake', cursive;
+            font-size: 2.5rem;
+            color: var(--ochre-light);
+            text-align: center;
+            text-shadow: 0 0 10px rgba(212, 167, 106, 0.5);
+            animation: textGlow 2s infinite alternate;
+            margin-top: 20px;
+        }
+
+        @keyframes textGlow {
+            from { text-shadow: 0 0 10px rgba(212, 167, 106, 0.5); }
+            to { text-shadow: 0 0 20px rgba(212, 167, 106, 0.8), 0 0 30px rgba(255, 107, 53, 0.3); }
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; visibility: hidden; }
+        }
+
+        /* ===== CONTAINER PRINCIPAL ===== */
+        .chapter-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            opacity: 0;
+            animation: contentReveal 1s ease-out 3.5s forwards;
+        }
+
+        @keyframes contentReveal {
+            to { opacity: 1; }
+        }
+
+        /* ===== NAVEGAÇÃO ===== */
+        .chapter-navigation {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background: rgba(44, 36, 22, 0.7);
+            border: 2px solid var(--ochre-primary);
+            border-radius: 50px;
+            padding: 12px 25px;
+            box-shadow: var(--shadow-deep);
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, var(--cave-medium) 0%, var(--charcoal) 100%);
+            border: 2px solid var(--ochre-primary);
+            color: var(--ochre-light);
+            padding: 12px 25px;
+            font-family: 'MedievalSharp', cursive;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: var(--transition);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            white-space: nowrap;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            border-color: var(--fire-glow);
+            color: var(--fire-glow);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .chapter-info {
+            text-align: center;
+        }
+
+        .chapter-number {
+            font-family: 'Rock Salt', cursive;
+            font-size: 1.5rem;
+            color: var(--ochre-primary);
+            display: block;
+        }
+
+        .chapter-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            color: var(--ochre-light);
+            font-weight: 600;
+        }
+
+        /* ===== CABEÇALHO HERO ===== */
+        .chapter-hero {
+            text-align: center;
+            padding: 120px 20px 80px;
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 50% 20%, rgba(212, 167, 106, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(255, 107, 53, 0.05) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        .hero-title {
+            font-family: 'Eagle Lake', cursive;
+            font-size: 4.5rem;
+            color: var(--ochre-light);
+            margin-bottom: 20px;
+            text-shadow: 
+                2px 2px 4px rgba(0,0,0,0.7),
+                0 0 20px rgba(212, 167, 106, 0.3);
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero-subtitle {
+            font-family: 'Caveat', cursive;
+            font-size: 2.2rem;
+            color: var(--ochre-secondary);
+            max-width: 800px;
+            margin: 0 auto 40px;
+            line-height: 1.4;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .stat-value {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            color: var(--ochre-primary);
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-faded);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ===== TIMELINE 3D ===== */
+        .timeline-section {
+            background: 
+                linear-gradient(135deg, rgba(44, 36, 22, 0.9) 0%, rgba(60, 44, 26, 0.85) 100%),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><g opacity="0.05"><circle cx="30" cy="30" r="5" fill="%23d4a76a"/><circle cx="170" cy="50" r="8" fill="%23ff6b35"/><circle cx="100" cy="150" r="12" fill="%23b55233"/></g></svg>');
+            border: 3px solid var(--ochre-primary);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 60px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                inset 0 0 40px rgba(0,0,0,0.7),
+                0 15px 40px rgba(0,0,0,0.5);
+        }
+
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            color: var(--ochre-light);
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--ochre-primary), transparent);
+        }
+
+        .timeline-3d {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 400px;
+            position: relative;
+            margin: 40px 0;
+        }
+
+        .timeline-era {
+            flex: 1;
+            height: 300px;
+            margin: 0 15px;
+            perspective: 1000px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .era-card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .timeline-era:hover .era-card {
+            transform: rotateY(15deg) translateY(-20px);
+        }
+
+        .era-front, .era-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .era-front {
+            background: linear-gradient(135deg, var(--cave-medium) 0%, var(--charcoal) 100%);
+            border: 3px solid;
+            color: var(--ochre-light);
+        }
+
+        .era-back {
+            background: linear-gradient(135deg, var(--earth-red) 0%, var(--clay-orange) 100%);
+            transform: rotateY(180deg);
+            color: var(--ochre-light);
+            overflow-y: auto;
+        }
+
+        .era-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .era-name {
+            font-family: 'Eagle Lake', cursive;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .era-years {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.1rem;
+            color: var(--ochre-primary);
+        }
+
+        .era-details {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-top: 15px;
+        }
+
+        /* Cores específicas para cada era */
+        .era-paleolitico .era-front { border-color: var(--earth-red); }
+        .era-neolitico .era-front { border-color: var(--clay-orange); }
+        .era-metais .era-front { border-color: var(--ochre-primary); }
+
+        /* ===== GALERIA INTERATIVA ===== */
+        .gallery-section {
+            margin: 80px 0;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .artwork-card {
+            background: linear-gradient(135deg, rgba(44, 36, 22, 0.9) 0%, rgba(60, 44, 26, 0.8) 100%);
+            border: 2px solid var(--ochre-primary);
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: var(--transition);
+            height: 320px;
+            position: relative;
+        }
+
+        .artwork-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            border-color: var(--fire-glow);
+            box-shadow: 
+                inset 0 0 30px rgba(0,0,0,0.6),
+                0 20px 40px rgba(255, 107, 53, 0.2);
+        }
+
+        .artwork-image {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .artwork-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.8) 100%);
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .artwork-card:hover .artwork-overlay {
+            opacity: 1;
+        }
+
+        .artwork-info {
+            padding: 20px;
+        }
+
+        .artwork-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            color: var(--ochre-light);
+            margin-bottom: 10px;
+        }
+
+        .artwork-location {
+            font-size: 0.9rem;
+            color: var(--text-faded);
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 5, 0, 0.97);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            max-width: 900px;
+            max-height: 90vh;
+            position: relative;
+        }
+
+        .lightbox-image {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            border: 3px solid var(--ochre-primary);
+        }
+
+        .lightbox-info {
+            background: rgba(44, 36, 22, 0.95);
+            padding: 25px;
+            border-radius: 0 0 10px 10px;
+            margin-top: -5px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--earth-red);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 2001;
+        }
+
+        /* ===== SIMULADOR DE FERRAMENTAS ===== */
+        .tool-simulator {
+            background: 
+                linear-gradient(135deg, rgba(44, 36, 22, 0.9) 0%, rgba(60, 44, 26, 0.85) 100%),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><filter id="stoneTexture"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3"/></filter><rect width="400" height="400" filter="url(%23stoneTexture)" opacity="0.2"/></svg>');
+            border: 3px solid var(--ochre-primary);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 60px 0;
+        }
+
+        .simulator-container {
+            display: flex;
+            gap: 40px;
+            margin-top: 40px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .tool-display {
+            flex: 1;
+            min-width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, var(--stone-gray) 0%, var(--charcoal) 100%);
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-3d {
+            font-size: 8rem;
+            transform-style: preserve-3d;
+            animation: toolFloat 4s infinite ease-in-out;
+        }
+
+        @keyframes toolFloat {
+            0%, 100% { transform: translateY(0) rotateX(10deg); }
+            50% { transform: translateY(-20px) rotateX(-10deg); }
+        }
+
+        .tool-controls {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .tool-option {
+            background: rgba(138, 109, 79, 0.3);
+            border: 2px solid var(--ochre-primary);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .tool-option:hover {
+            background: rgba(212, 167, 106, 0.2);
+            border-color: var(--fire-glow);
+            transform: translateX(10px);
+        }
+
+        .tool-option.active {
+            background: rgba(212, 167, 106, 0.3);
+            border-color: var(--fire-glow);
+            box-shadow: inset 0 0 10px rgba(255, 107, 53, 0.3);
+        }
+
+        .tool-icon {
+            font-size: 2rem;
+            width: 50px;
+            text-align: center;
+        }
+
+        .tool-desc {
+            flex: 1;
+        }
+
+        .tool-name {
+            font-family: 'Cinzel', serif;
+            color: var(--ochre-light);
+            margin-bottom: 5px;
+        }
+
+        .tool-period {
+            font-size: 0.9rem;
+            color: var(--text-faded);
+        }
+
+        /* ===== MAPA DE MIGRAÇÃO ===== */
+        .migration-map {
+            background: 
+                linear-gradient(135deg, rgba(26, 19, 13, 0.95) 0%, rgba(44, 36, 22, 0.9) 100%),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="300" viewBox="0 0 600 300"><path d="M50,150 Q200,100 350,150 T550,150" stroke="%23d4a76a" stroke-width="2" fill="none" opacity="0.1"/></svg>');
+            border: 3px solid var(--ochre-primary);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 60px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-container {
+            width: 100%;
+            height: 500px;
+            position: relative;
+            margin-top: 30px;
+        }
+
+        .world-map {
+            width: 100%;
+            height: 100%;
+            background: 
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400"><g opacity="0.2"><path d="M200,100 C250,80 300,120 350,100 C400,80 450,140 500,120 C550,100 600,160 650,140" stroke="%23d4a76a" stroke-width="2" fill="none"/></g></svg>'),
+                linear-gradient(135deg, rgba(106, 81, 56, 0.3) 0%, rgba(138, 109, 79, 0.2) 100%);
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .migration-path {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .migration-point {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--fire-glow);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            animation: pointPulse 2s infinite;
+            border: 3px solid var(--ochre-light);
+        }
+
+        @keyframes pointPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.2); }
+        }
+
+        .migration-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(44, 36, 22, 0.9);
+            padding: 20px;
+            border-top: 2px solid var(--ochre-primary);
+            display: none;
+        }
+
+        .migration-info.active {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        /* ===== QUIZ INTERATIVO ===== */
+        .quiz-section {
+            background: linear-gradient(135deg, rgba(44, 36, 22, 0.9) 0%, rgba(60, 44, 26, 0.85) 100%);
+            border: 3px solid var(--ochre-primary);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 60px 0;
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quiz-progress {
+            height: 8px;
+            background: rgba(138, 109, 79, 0.3);
+            border-radius: 4px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+
+        .quiz-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--earth-red), var(--ochre-primary));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .quiz-question {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            color: var(--ochre-light);
+            margin-bottom: 30px;
+            text-align: center;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .quiz-option {
+            background: rgba(138, 109, 79, 0.3);
+            border: 2px solid var(--ochre-primary);
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .quiz-option:hover {
+            background: rgba(212, 167, 106, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .quiz-option.correct {
+            background: rgba(106, 168, 79, 0.3);
+            border-color: #6aa84f;
+        }
+
+        .quiz-option.incorrect {
+            background: rgba(168, 79, 79, 0.3);
+            border-color: #a84f4f;
+        }
+
+        .quiz-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        /* ===== SISTEMA DE PROGRESSO ===== */
+        .progress-section {
+            position: sticky;
+            bottom: 20px;
+            background: rgba(44, 36, 22, 0.95);
+            border: 2px solid var(--ochre-primary);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 60px;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+
+        .chapter-progress {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .progress-bar {
+            flex: 1;
+            min-width: 200px;
+            height: 20px;
+            background: rgba(138, 109, 79, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--earth-red), var(--ochre-primary));
+            width: 0%;
+            transition: width 1s ease;
+            position: relative;
+        }
+
+        .progress-text {
+            font-family: 'MedievalSharp', cursive;
+            color: var(--ochre-light);
+            min-width: 150px;
+            text-align: center;
+        }
+
+        /* ===== RODAPÉ ===== */
+        .chapter-footer {
+            text-align: center;
+            padding: 60px 20px;
+            margin-top: 80px;
+            border-top: 3px solid var(--ochre-primary);
+            position: relative;
+        }
+
+        .next-chapter-btn {
+            background: linear-gradient(135deg, var(--earth-red) 0%, var(--ochre-primary) 100%);
+            border: none;
+            color: var(--ochre-light);
+            padding: 20px 40px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: var(--transition);
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            margin: 30px auto;
+        }
+
+        .next-chapter-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .chapter-complete {
+            font-family: 'Caveat', cursive;
+            font-size: 1.8rem;
+            color: var(--ochre-secondary);
+            max-width: 600px;
+            margin: 40px auto;
+            line-height: 1.6;
+        }
+
+        /* ===== RESPONSIVIDADE ===== */
+        @media (max-width: 1024px) {
+            .hero-title {
+                font-size: 3.5rem;
+            }
+            
+            .timeline-3d {
+                flex-direction: column;
+                height: auto;
+                gap: 30px;
+            }
+            
+            .timeline-era {
+                width: 100%;
+                max-width: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .chapter-navigation {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+                border-radius: 20px;
+            }
+            
+            .hero-title {
+                font-size: 2.8rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.8rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .simulator-container {
+                flex-direction: column;
+            }
+            
+            .map-container {
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.4rem;
+            }
+            
+            .chapter-hero {
+                padding: 100px 15px 60px;
+            }
+            
+            .timeline-section,
+            .tool-simulator,
+            .migration-map,
+            .quiz-section {
+                padding: 25px;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stat-item {
+                min-width: 100px;
+            }
+            
+            .stat-value {
+                font-size: 2rem;
+            }
+        }
+
+        /* ===== UTILITÁRIOS ===== */
+        .hidden {
+            display: none !important;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* ===== SCROLLBAR PERSONALIZADA ===== */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--cave-dark);
+            border-left: 1px solid var(--ochre-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--earth-red) 0%, var(--ochre-primary) 100%);
+            border-radius: 0;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, var(--fire-glow) 0%, var(--ochre-light) 100%);
+        }
+
+        /* ===== SELEÇÃO DE TEXTO ===== */
+        ::selection {
+            background: rgba(212, 167, 106, 0.3);
+            color: var(--ochre-light);
+        }
+    </style>
+</head>
+<body>
+    <!-- Animação de Entrada -->
+    <div class="cave-entrance">
+        <div class="torch-animation">
+            <div class="torch-handle"></div>
+            <div class="torch-flame"></div>
+        </div>
+        <div class="entrance-text">DESCENDO ÀS PROFUNDEZAS DO TEMPO...</div>
+    </div>
+
+    <!-- Navegação Fixa -->
+    <nav class="chapter-navigation">
+        <button class="nav-btn" onclick="goBackToIndex()">
+            <i class="fas fa-arrow-left"></i>
+            VOLTAR AO ÍNDICE
+        </button>
+        
+        <div class="chapter-info">
+            <span class="chapter-number">CAPÍTULO 01</span>
+            <div class="chapter-title">A ALVORADA DA HUMANIDADE</div>
+        </div>
+        
+        <button class="nav-btn" onclick="markChapterComplete()">
+            <i class="fas fa-check-circle"></i>
+            MARCAR COMO ESTUDADO
+        </button>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <div class="chapter-container">
+        <!-- Cabeçalho Hero -->
+        <header class="chapter-hero">
+            <div class="hero-bg"></div>
+            <h1 class="hero-title">PRÉ-HISTÓRIA</h1>
+            <p class="hero-subtitle">Das primeiras pegadas humanas às primeiras fogueiras da civilização</p>
+            
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-value">2.5M</div>
+                    <div class="stat-label">Anos de Evolução</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Períodos Principais</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">54</div>
+                    <div class="stat-label">Espécies Descobertas</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">1.5M</div>
+                    <div class="stat-label">Domínio do Fogo</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Timeline 3D -->
+        <section class="timeline-section">
+            <h2 class="section-title">A JORNADA DA EVOLUÇÃO HUMANA</h2>
+            
+            <div class="timeline-3d">
+                <div class="timeline-era era-paleolitico" onclick="flipEra(this)">
+                    <div class="era-card">
+                        <div class="era-front">
+                            <div class="era-icon">🦍</div>
+                            <div class="era-name">PALEOLÍTICO</div>
+                            <div class="era-years">2.5M - 10.000 a.C.</div>
+                            <p class="era-details">Período da pedra lascada</p>
+                        </div>
+                        <div class="era-back">
+                            <h3>Características</h3>
+                            <p>• Caça-coleta nômade<br>• Domínio do fogo<br>• Primeiras ferramentas de pedra<br>• Pinturas rupestres<br>• Vida em cavernas</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-era era-neolitico" onclick="flipEra(this)">
+                    <div class="era-card">
+                        <div class="era-front">
+                            <div class="era-icon">🌾</div>
+                            <div class="era-name">NEOLÍTICO</div>
+                            <div class="era-years">10.000 - 4.000 a.C.</div>
+                            <p class="era-details">Revolução Agrícola</p>
+                        </div>
+                        <div class="era-back">
+                            <h3>Características</h3>
+                            <p>• Sedentarização<br>• Agricultura e domesticação<br>• Cerâmica e tecelagem<br>• Primeiras vilas<br>• Hierarquia social</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-era era-metais" onclick="flipEra(this)">
+                    <div class="era-card">
+                        <div class="era-front">
+                            <div class="era-icon">⚒️</div>
+                            <div class="era-name">IDADE DOS METAIS</div>
+                            <div class="era-years">4.000 - 1.000 a.C.</div>
+                            <p class="era-details">Domínio dos Metais</p>
+                        </div>
+                        <div class="era-back">
+                            <h3>Características</h3>
+                            <p>• Metalurgia (cobre, bronze, ferro)<br>• Primeiras cidades<br>• Escrita cuneiforme<br>• Comércio organizado<br>• Estado e exército</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Galeria de Arte Rupestre -->
+        <section class="gallery-section">
+            <h2 class="section-title">GALERIA DA ARTE PRIMORDIAL</h2>
+            <p style="text-align: center; color: var(--text-faded); margin-bottom: 30px; font-size: 1.1rem;">
+                Clique nas pinturas para explorar detalhes
+            </p>
+            
+            <div class="gallery-grid">
+                <div class="artwork-card" onclick="openLightbox('lascaux')">
+                    <div class="artwork-image" style="background-image: url('https://images.unsplash.com/photo-1546436836-07bfe9ee8b9c?auto=format&fit=crop&w=500')">
+                        <div class="artwork-overlay">
+                            <div class="artwork-title">Caverna de Lascaux</div>
+                        </div>
+                    </div>
+                    <div class="artwork-info">
+                        <div class="artwork-title">Lascaux - França</div>
+                        <div class="artwork-location">17.000 anos | Paleolítico Superior</div>
+                    </div>
+                </div>
+                
+                <div class="artwork-card" onclick="openLightbox('altamira')">
+                    <div class="artwork-image" style="background-image: url('https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=500')">
+                        <div class="artwork-overlay">
+                            <div class="artwork-title">Caverna de Altamira</div>
+                        </div>
+                    </div>
+                    <div class="artwork-info">
+                        <div class="artwork-title">Altamira - Espanha</div>
+                        <div class="artwork-location">14.000 anos | Realismo animal</div>
+                    </div>
+                </div>
+                
+                <div class="artwork-card" onclick="openLightbox('chauvet')">
+                    <div class="artwork-image" style="background-image: url('https://images.unsplash.com/photo-1544966503-7cc5acdf8d6a?auto=format&fit=crop&w=500')">
+                        <div class="artwork-overlay">
+                            <div class="artwork-title">Caverna de Chauvet</div>
+                        </div>
+                    </div>
+                    <div class="artwork-info">
+                        <div class="artwork-title">Chauvet - França</div>
+                        <div class="artwork-location">32.000 anos | Mais antiga conhecida</div>
+                    </div>
+                </div>
+                
+                <div class="artwork-card" onclick="openLightbox('venus')">
+                    <div class="artwork-image" style="background-image: url('https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&fit=crop&w=500')">
+                        <div class="artwork-overlay">
+                            <div class="artwork-title">Vênus de Willendorf</div>
+                        </div>
+                    </div>
+                    <div class="artwork-info">
+                        <div class="artwork-title">Vênus de Willendorf</div>
+                        <div class="artwork-location">25.000 anos | Estatueta de fertilidade</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lightbox -->
+        <div class="lightbox" id="lightbox">
+            <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+            <div class="lightbox-content">
+                <img id="lightbox-img" class="lightbox-image" src="" alt="">
+                <div class="lightbox-info">
+                    <h3 id="lightbox-title"></h3>
+                    <p id="lightbox-desc"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Simulador de Ferramentas -->
+        <section class="tool-simulator">
+            <h2 class="section-title">LABORATÓRIO DE TECNOLOGIA PRIMITIVA</h2>
+            
+            <div class="simulator-container">
+                <div class="tool-display">
+                    <div class="tool-3d" id="currentTool">🪨</div>
+                </div>
+                
+                <div class="tool-controls">
+                    <div class="tool-option active" onclick="selectTool('chopper')">
+                        <div class="tool-icon">🪨</div>
+                        <div class="tool-desc">
+                            <div class="tool-name">Chopper</div>
+                            <div class="tool-period">Olduvaiense | 2.5M anos</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-option" onclick="selectTool('handaxe')">
+                        <div class="tool-icon">🗿</div>
+                        <div class="tool-desc">
+                            <div class="tool-name">Machado de Mão</div>
+                            <div class="tool-period">Acheulense | 1.5M anos</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-option" onclick="selectTool('blade')">
+                        <div class="tool-icon">🔪</div>
+                        <div class="tool-desc">
+                            <div class="tool-name">Lâmina de Pedra</div>
+                            <div class="tool-period">Solutrense | 20.000 anos</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-option" onclick="selectTool('harpoon')">
+                        <div class="tool-icon">🎣</div>
+                        <div class="tool-desc">
+                            <div class="tool-name">Arpão de Osso</div>
+                            <div class="tool-period">Magdaleniense | 15.000 anos</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mapa de Migração -->
+        <section class="migration-map">
+            <h2 class="section-title">A GRANDE DIÁSPORA HUMANA</h2>
+            
+            <div class="map-container">
+                <div class="world-map">
+                    <!-- Pontos de migração serão adicionados via JavaScript -->
+                </div>
+                <div class="migration-info" id="migrationInfo">
+                    <h3 id="migrationTitle"></h3>
+                    <p id="migrationDescription"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quiz Interativo -->
+        <section class="quiz-section">
+            <h2 class="section-title">TESTE SEU CONHECIMENTO PRÉ-HISTÓRICO</h2>
+            
+            <div class="quiz-container">
+                <div class="quiz-progress">
+                    <div class="quiz-progress-bar" id="quizProgress"></div>
+                </div>
+                
+                <div class="quiz-question" id="quizQuestion"></div>
+                
+                <div class="quiz-options" id="quizOptions"></div>
+                
+                <div class="quiz-nav">
+                    <button class="nav-btn" onclick="prevQuestion()" id="prevBtn" style="display: none;">
+                        <i class="fas fa-arrow-left"></i> ANTERIOR
+                    </button>
+                    <button class="nav-btn" onclick="nextQuestion()" id="nextBtn">
+                        PRÓXIMA <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sistema de Progresso -->
+        <div class="progress-section">
+            <div class="chapter-progress">
+                <div class="progress-text">
+                    <span id="progressPercent">0%</span> COMPLETO
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <button class="nav-btn" onclick="saveProgress()">
+                    <i class="fas fa-save"></i> SALVAR PROGRESSO
+                </button>
+            </div>
+        </div>
+
+        <!-- Rodapé -->
+        <footer class="chapter-footer">
+            <button class="next-chapter-btn" onclick="goToNextChapter()">
+                <i class="fas fa-arrow-right"></i>
+                PRÓXIMO CAPÍTULO: O CRESCENTE FÉRTIL
+            </button>
+            
+            <div class="chapter-complete">
+                "Cada ferramenta lascada, cada fogueira acesa, cada pintura na parede da caverna 
+                foi um passo na longa jornada que nos trouxe até aqui. A pré-história não é apenas 
+                nosso passado distante - é a fundação de tudo que somos."
+            </div>
+            
+            <div style="color: var(--text-faded); font-size: 0.9rem; margin-top: 40px;">
+                © PALÁCIO DA HISTÓRIA | CAPÍTULO 01 - A ALVORADA DA HUMANIDADE<br>
+                Sistema Mnemônico de Aprendizado Histórico
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // =============================================
+        // SISTEMA PRINCIPAL DO CAPÍTULO
+        // =============================================
+        
+        // Configuração inicial
+        const CHAPTER_NUMBER = "01";
+        let chapterProgress = 0;
+        let currentQuizQuestion = 0;
+        let quizScore = 0;
+        
+        // Dados para as seções interativas
+        const lightboxData = {
+            lascaux: {
+                title: "Caverna de Lascaux (França)",
+                desc: "Descoberta em 1940, Lascaux é conhecida como a 'Capela Sistina da Pré-História'. Contém mais de 600 pinturas de animais (bisões, cavalos, cervos) e símbolos abstratos, datadas de aproximadamente 17.000 anos atrás. As pinturas demonstram técnicas avançadas de perspectiva e movimento."
+            },
+            altamira: {
+                title: "Caverna de Altamira (Espanha)",
+                desc: "Primeira caverna com pinturas rupestres descoberta (1879). As pinturas policromadas de bisões são tão realistas que inicialmente foram consideradas falsas. Datação: 14.000 anos. Demonstra o domínio da técnica de relevo usando as saliências naturais da rocha."
+            },
+            chauvet: {
+                title: "Caverna de Chauvet (França)",
+                desc: "Descoberta em 1994, contém as mais antigas pinturas rupestres conhecidas (32.000 anos). Inclui representações de animais perigosos (leões, rinocerontes, ursos) que raramente eram caçados, sugerindo um significado ritualístico ou simbólico."
+            },
+            venus: {
+                title: "Vênus de Willendorf (Áustria)",
+                desc: "Estatueta de fertilidade de 11 cm, esculpida em calcário há 25.000 anos. Exagera características femininas (seios, ventre, quadris), possivelmente representando um ideal de fertilidade ou uma deusa mãe. Uma das primeiras representações da figura humana."
+            }
+        };
+        
+        const toolData = {
+            chopper: {
+                emoji: "🪨",
+                name: "Chopper (Olduvaiense)",
+                period: "2.5 milhões de anos atrás",
+                desc: "A ferramenta mais antiga conhecida. Feita golpeando uma pedra contra outra para criar uma borda cortante. Usada para cortar carne, raspar couro e quebrar ossos.",
+                technique: "Lascamento simples"
+            },
+            handaxe: {
+                emoji: "🗿",
+                name: "Machado de Mão (Acheulense)",
+                period: "1.5 milhão de anos atrás",
+                desc: "Primeira ferramenta padronizada. Forma simétrica em amêndoa, trabalhada em ambas as faces. Revolução tecnológica que durou mais de 1 milhão de anos.",
+                technique: "Lascamento bifacial"
+            },
+            blade: {
+                emoji: "🔪",
+                name: "Lâmina de Pedra (Solutrense)",
+                period: "20.000 anos atrás",
+                desc: "Lâminas longas e finas produzidas a partir de núcleos preparados. Extremamente eficientes e econômicas no uso da matéria-prima.",
+                technique: "Pressão flaking"
+            },
+            harpoon: {
+                emoji: "🎣",
+                name: "Arpão de Osso (Magdaleniense)",
+                period: "15.000 anos atrás",
+                desc: "Armas especializadas para pesca. Feitas de ossos ou chifres, com dentes laterais para prender o peixe. Demonstra especialização tecnológica.",
+                technique: "Entalhe e polimento"
+            }
+        };
+        
+        const migrationPoints = [
+            { x: 20, y: 45, title: "Origem Africana", desc: "Homo Sapiens surgiu na África há aproximadamente 300.000 anos" },
+            { x: 35, y: 40, title: "Expansão para o Oriente Médio", desc: "Primeira migração para fora da África há 100.000 anos" },
+            { x: 55, y: 35, title: "Chegada à Ásia", desc: "Expansão pelo Sul da Ásia há 70.000 anos" },
+            { x: 75, y: 40, title: "Povoamento da Europa", desc: "Chegada à Europa há 45.000 anos, coexistindo com Neandertais" },
+            { x: 85, y: 50, title: "Chegada às Américas", desc: "Povoamento da América via Estreito de Bering há 15.000 anos" },
+            { x: 50, y: 60, title: "Ocupação da Oceania", desc: "Chegada à Austrália há 50.000 anos, navegando em embarcações simples" }
+        ];
+        
+        const quizQuestions = [
+            {
+                question: "Qual foi a primeira espécie humana a dominar o uso do fogo?",
+                options: [
+                    "Homo Habilis",
+                    "Homo Erectus",
+                    "Homo Neanderthalensis",
+                    "Homo Sapiens"
+                ],
+                correct: 1,
+                explanation: "O Homo Erectus foi a primeira espécie humana a dominar o fogo há aproximadamente 1.5 milhão de anos."
+            },
+            {
+                question: "O que caracterizou a Revolução Neolítica?",
+                options: [
+                    "Domínio dos metais",
+                    "Desenvolvimento da escrita",
+                    "Transição para a agricultura",
+                    "Primeiras pinturas rupestres"
+                ],
+                correct: 2,
+                explanation: "A Revolução Neolítica foi marcada pela transição do nomadismo para o sedentarismo através da agricultura e domesticação de animais."
+            },
+            {
+                question: "Qual destas ferramentas é a mais antiga?",
+                options: [
+                    "Machado de bronze",
+                    "Lâmina de pedra lascada",
+                    "Arpão de osso",
+                    "Chopper de pedra"
+                ],
+                correct: 3,
+                explanation: "O chopper de pedra, do período Olduvaiense, é a ferramenta mais antiga conhecida, com cerca de 2.5 milhões de anos."
+            },
+            {
+                question: "Onde foram encontradas as pinturas rupestres mais antigas conhecidas?",
+                options: [
+                    "Lascaux, França",
+                    "Altamira, Espanha",
+                    "Chauvet, França",
+                    "Willendorf, Áustria"
+                ],
+                correct: 2,
+                explanation: "As pinturas da Caverna de Chauvet, na França, são as mais antigas conhecidas, datadas de 32.000 anos."
+            },
+            {
+                question: "Qual foi o principal motivo da migração humana para fora da África?",
+                options: [
+                    "Busca por metais preciosos",
+                    "Mudanças climáticas e busca por recursos",
+                    "Conflitos tribais",
+                    "Curiosidade exploratória"
+                ],
+                correct: 1,
+                explanation: "Mudanças climáticas que alternavam entre períodos glaciais e interglaciais, juntamente com a busca por novos recursos, impulsionaram as migrações."
+            }
+        ];
+        
+        // =============================================
+        // FUNÇÕES PRINCIPAIS
+        // =============================================
+        
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log(`📜 Capítulo ${CHAPTER_NUMBER} - Pré-História carregado`);
+            
+            // Carregar progresso salvo
+            loadChapterProgress();
+            
+            // Inicializar mapa de migração
+            initMigrationMap();
+            
+            // Inicializar quiz
+            initQuiz();
+            
+            // Inicializar simulador de ferramentas
+            initToolSimulator();
+            
+            // Atualizar progresso visual
+            updateProgressDisplay();
+            
+            // Efeitos de entrada
+            setTimeout(() => {
+                document.querySelectorAll('.section-title').forEach((title, index) => {
+                    setTimeout(() => {
+                        title.classList.add('fade-in');
+                    }, index * 200);
+                });
+            }, 1000);
+            
+            // Configurar sons ambiente (opcional)
+            initAmbientSounds();
+        });
+        
+        // =============================================
+        // SISTEMA DE PROGRESSO
+        // =============================================
+        
+        function loadChapterProgress() {
+            const saved = localStorage.getItem(`palacio_chapter_${CHAPTER_NUMBER}`);
+            if (saved) {
+                try {
+                    const progress = JSON.parse(saved);
+                    chapterProgress = progress.percent || 0;
+                    
+                    // Se já estiver marcado como estudado, começar com 100%
+                    if (progress.completed) {
+                        chapterProgress = 100;
+                    }
+                } catch (e) {
+                    console.error('Erro ao carregar progresso:', e);
+                }
+            }
+            
+            // Atualizar progresso baseado na interação do usuário
+            updateProgress(10); // Progresso inicial por carregar a página
+        }
+        
+        function updateProgress(increment) {
+            chapterProgress = Math.min(chapterProgress + increment, 100);
+            updateProgressDisplay();
+            
+            // Atualizar no dashboard principal se estiver em um iframe ou mesma janela
+            if (window.parent && window.parent !== window) {
+                try {
+                    window.parent.postMessage({
+                        type: 'chapterProgress',
+                        chapter: CHAPTER_NUMBER,
+                        progress: chapterProgress
+                    }, '*');
+                } catch (e) {
+                    console.log('Não foi possível atualizar o dashboard principal');
+                }
+            }
+        }
+        
+        function updateProgressDisplay() {
+            const progressFill = document.getElementById('progressFill');
+            const progressPercent = document.getElementById('progressPercent');
+            
+            if (progressFill) {
+                progressFill.style.width = `${chapterProgress}%`;
+            }
+            
+            if (progressPercent) {
+                progressPercent.textContent = `${chapterProgress}%`;
+            }
+        }
+        
+        function saveProgress() {
+            const progressData = {
+                chapter: CHAPTER_NUMBER,
+                percent: chapterProgress,
+                completed: chapterProgress >= 100,
+                lastUpdated: new Date().toISOString(),
+                timeSpent: calculateTimeSpent()
+            };
+            
+            localStorage.setItem(`palacio_chapter_${CHAPTER_NUMBER}`, JSON.stringify(progressData));
+            
+            showNotification('Progresso salvo com sucesso!', 'success');
+            updateProgress(5);
+        }
+        
+        function calculateTimeSpent() {
+            // Simulação - em um sistema real, você rastrearia o tempo
+            return 30; // 30 minutos
+        }
+        
+        function markChapterComplete() {
+            if (confirm('Deseja marcar este capítulo como completamente estudado?')) {
+                chapterProgress = 100;
+                updateProgressDisplay();
+                saveProgress();
+                
+                showNotification('Capítulo marcado como estudado! Parabéns!', 'success');
+            }
+        }
+        
+        // =============================================
+        // TIMELINE 3D
+        // =============================================
+        
+        function flipEra(element) {
+            const card = element.querySelector('.era-card');
+            const isFlipped = card.style.transform.includes('rotateY(180deg)');
+            
+            if (isFlipped) {
+                card.style.transform = 'rotateY(0deg)';
+            } else {
+                card.style.transform = 'rotateY(180deg)';
+                updateProgress(2);
+            }
+            
+            // Efeito sonoro
+            playSound('stone');
+        }
+        
+        // =============================================
+        // GALERIA DE ARTE RUPESTRE
+        // =============================================
+        
+        function openLightbox(paintingId) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxTitle = document.getElementById('lightbox-title');
+            const lightboxDesc = document.getElementById('lightbox-desc');
+            
+            if (lightboxData[paintingId]) {
+                const data = lightboxData[paintingId];
+                
+                // Configurar imagem baseada no ID
+                const imageUrls = {
+                    lascaux: 'https://images.unsplash.com/photo-1546436836-07bfe9ee8b9c?auto=format&fit=crop&w=1200',
+                    altamira: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=1200',
+                    chauvet: 'https://images.unsplash.com/photo-1544966503-7cc5acdf8d6a?auto=format&fit=crop&w=1200',
+                    venus: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&fit=crop&w=1200'
+                };
+                
+                lightboxImg.src = imageUrls[paintingId] || '';
+                lightboxTitle.textContent = data.title;
+                lightboxDesc.textContent = data.desc;
+                
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                
+                updateProgress(3);
+            }
+        }
+        
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Fechar lightbox com ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            }
+        });
+        
+        // =============================================
+        // SIMULADOR DE FERRAMENTAS
+        // =============================================
+        
+        function initToolSimulator() {
+            // Selecionar primeira ferramenta por padrão
+            selectTool('chopper');
+        }
+        
+        function selectTool(toolId) {
+            const toolOptions = document.querySelectorAll('.tool-option');
+            const currentTool = document.getElementById('currentTool');
+            
+            // Remover classe active de todas as opções
+            toolOptions.forEach(option => {
+                option.classList.remove('active');
+            });
+            
+            // Adicionar classe active à opção selecionada
+            const selectedOption = Array.from(toolOptions).find(option => 
+                option.onclick.toString().includes(`'${toolId}'`)
+            );
+            
+            if (selectedOption) {
+                selectedOption.classList.add('active');
+            }
+            
+            // Atualizar exibição da ferramenta
+            if (toolData[toolId]) {
+                const tool = toolData[toolId];
+                currentTool.textContent = tool.emoji;
+                currentTool.style.animation = 'none';
+                
+                // Efeito de animação
+                setTimeout(() => {
+                    currentTool.style.animation = 'toolFloat 4s infinite ease-in-out';
+                }, 10);
+                
+                updateProgress(1);
+                playSound('tool');
+            }
+        }
+        
+        // =============================================
+        // MAPA DE MIGRAÇÃO
+        // =============================================
+        
+        function initMigrationMap() {
+            const mapContainer = document.querySelector('.world-map');
+            
+            migrationPoints.forEach(point => {
+                const pointElement = document.createElement('div');
+                pointElement.className = 'migration-point';
+                pointElement.style.left = `${point.x}%`;
+                pointElement.style.top = `${point.y}%`;
+                pointElement.dataset.title = point.title;
+                pointElement.dataset.desc = point.desc;
+                
+                pointElement.addEventListener('click', function() {
+                    showMigrationInfo(point.title, point.desc);
+                    updateProgress(2);
+                });
+                
+                pointElement.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                });
+                
+                pointElement.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translate(-50%, -50%) scale(1)';
+                });
+                
+                mapContainer.appendChild(pointElement);
+            });
+            
+            // Adicionar linha de migração
+            const pathElement = document.createElement('div');
+            pathElement.className = 'migration-path';
+            pathElement.innerHTML = `
+                <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <path d="M20,45 Q30,40 35,40 Q45,35 55,35 Q65,38 75,40 Q80,45 85,50" 
+                          stroke="#d4a76a" stroke-width="1" fill="none" opacity="0.3"
+                          stroke-dasharray="5,5">
+                        <animate attributeName="stroke-dashoffset" from="100" to="0" dur="10s" repeatCount="indefinite" />
+                    </path>
+                </svg>
+            `;
+            mapContainer.appendChild(pathElement);
+        }
+        
+        function showMigrationInfo(title, description) {
+            const infoBox = document.getElementById('migrationInfo');
+            const infoTitle = document.getElementById('migrationTitle');
+            const infoDesc = document.getElementById('migrationDescription');
+            
+            // Remover active de todas as informações
+            document.querySelectorAll('.migration-point').forEach(point => {
+                point.style.boxShadow = 'none';
+            });
+            
+            infoTitle.textContent = title;
+            infoDesc.textContent = description;
+            
+            infoBox.classList.add('active');
+            
+            // Esconder após 10 segundos
+            setTimeout(() => {
+                infoBox.classList.remove('active');
+            }, 10000);
+        }
+        
+        // =============================================
+        // QUIZ INTERATIVO
+        // =============================================
+        
+        function initQuiz() {
+            currentQuizQuestion = 0;
+            quizScore = 0;
+            updateQuizDisplay();
+        }
+        
+        function updateQuizDisplay() {
+            const questionElement = document.getElementById('quizQuestion');
+            const optionsElement = document.getElementById('quizOptions');
+            const progressBar = document.getElementById('quizProgress');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            if (currentQuizQuestion >= quizQuestions.length) {
+                showQuizResults();
+                return;
+            }
+            
+            const question = quizQuestions[currentQuizQuestion];
+            
+            // Atualizar pergunta
+            questionElement.textContent = question.question;
+            
+            // Atualizar opções
+            optionsElement.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'quiz-option';
+                optionElement.textContent = option;
+                optionElement.onclick = () => selectAnswer(index);
+                optionsElement.appendChild(optionElement);
+            });
+            
+            // Atualizar barra de progresso
+            const progressPercent = ((currentQuizQuestion) / quizQuestions.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+            
+            // Atualizar botões de navegação
+            prevBtn.style.display = currentQuizQuestion > 0 ? 'flex' : 'none';
+            nextBtn.textContent = currentQuizQuestion < quizQuestions.length - 1 ? 
+                'PRÓXIMA <i class="fas fa-arrow-right"></i>' : 
+                'VER RESULTADO <i class="fas fa-chart-bar"></i>';
+        }
+        
+        function selectAnswer(selectedIndex) {
+            const question = quizQuestions[currentQuizQuestion];
+            const options = document.querySelectorAll('.quiz-option');
+            
+            // Remover seleções anteriores
+            options.forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+                option.style.pointerEvents = 'none';
+            });
+            
+            // Mostrar resposta correta
+            options[question.correct].classList.add('correct');
+            
+            // Se errou, mostrar erro
+            if (selectedIndex !== question.correct) {
+                options[selectedIndex].classList.add('incorrect');
+            } else {
+                quizScore++;
+                updateProgress(5);
+            }
+            
+            // Explicação
+            setTimeout(() => {
+                showNotification(question.explanation, 'info');
+            }, 1000);
+        }
+        
+        function nextQuestion() {
+            if (currentQuizQuestion < quizQuestions.length - 1) {
+                currentQuizQuestion++;
+                updateQuizDisplay();
+            } else {
+                showQuizResults();
+            }
+        }
+        
+        function prevQuestion() {
+            if (currentQuizQuestion > 0) {
+                currentQuizQuestion--;
+                updateQuizDisplay();
+            }
+        }
+        
+        function showQuizResults() {
+            const scorePercent = Math.round((quizScore / quizQuestions.length) * 100);
+            const questionElement = document.getElementById('quizQuestion');
+            const optionsElement = document.getElementById('quizOptions');
+            const quizNav = document.querySelector('.quiz-nav');
+            
+            questionElement.innerHTML = `
+                <div style="text-align: center;">
+                    <div style="font-size: 4rem; margin-bottom: 20px;">${scorePercent >= 70 ? '🏆' : '📜'}</div>
+                    <h3 style="color: var(--ochre-primary); margin-bottom: 10px;">QUIZ COMPLETO!</h3>
+                    <p style="font-size: 1.5rem; color: var(--ochre-light);">
+                        Pontuação: <strong>${quizScore}/${quizQuestions.length}</strong> (${scorePercent}%)
+                    </p>
+                    <p style="color: var(--text-faded); margin-top: 20px;">
+                        ${scorePercent >= 70 ? 
+                            'Excelente! Você domina a Pré-História!' : 
+                            'Bom trabalho! Continue estudando para melhorar!'}
+                    </p>
+                </div>
+            `;
+            
+            optionsElement.innerHTML = '';
+            quizNav.innerHTML = `
+                <button class="nav-btn" onclick="initQuiz()" style="margin: 0 auto;">
+                    <i class="fas fa-redo"></i> REFAZER QUIZ
+                </button>
+            `;
+            
+            // Atualizar progresso baseado na pontuação
+            if (scorePercent >= 70) {
+                updateProgress(15);
+            } else {
+                updateProgress(5);
+            }
+        }
+        
+        // =============================================
+        // NAVEGAÇÃO
+        // =============================================
+        
+        function goBackToIndex() {
+            // Salvar progresso antes de sair
+            saveProgress();
+            
+            // Voltar para o índice
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                // Fallback - assumindo que o índice está no mesmo diretório
+                window.location.href = 'index.html';
+            }
+        }
+        
+        function goToNextChapter() {
+            // Salvar progresso
+            saveProgress();
+            
+            // Ir para o próximo capítulo
+            const nextChapter = 'capitulo-02.html'; // Substitua pelo link correto
+            
+            // Mostrar mensagem de transição
+            showNotification('Carregando próximo capítulo...', 'info');
+            
+            // Simular transição
+            document.body.style.opacity = '0.7';
+            document.body.style.transition = 'opacity 0.5s';
+            
+            setTimeout(() => {
+                window.location.href = nextChapter;
+            }, 1000);
+        }
+        
+        // =============================================
+        // SISTEMA DE NOTIFICAÇÕES
+        // =============================================
+        
+        function showNotification(message, type = 'info') {
+            // Remover notificação anterior
+            const oldNotification = document.querySelector('.chapter-notification');
+            if (oldNotification) oldNotification.remove();
+            
+            // Cores por tipo
+            const colors = {
+                success: '#6aa84f',
+                error: '#a84f4f',
+                info: '#d4a76a',
+                warning: '#b55233'
+            };
+            
+            // Criar notificação
+            const notification = document.createElement('div');
+            notification.className = 'chapter-notification';
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%) translateY(100px);
+                background: linear-gradient(135deg, var(--cave-medium) 0%, var(--charcoal) 100%);
+                color: ${colors[type] || colors.info};
+                padding: 15px 30px;
+                border: 2px solid ${colors[type] || colors.info};
+                border-radius: 50px;
+                box-shadow: var(--shadow-deep);
+                z-index: 2000;
+                font-family: 'MedievalSharp', cursive;
+                text-align: center;
+                white-space: nowrap;
+                animation: notificationSlide 0.3s ease forwards;
+            `;
+            
+            // Adicionar animação
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes notificationSlide {
+                    to { transform: translateX(-50%) translateY(0); }
+                }
+                @keyframes notificationSlideOut {
+                    from { transform: translateX(-50%) translateY(0); }
+                    to { transform: translateX(-50%) translateY(100px); }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // Remover após 4 segundos
+            setTimeout(() => {
+                notification.style.animation = 'notificationSlideOut 0.3s ease forwards';
+                setTimeout(() => {
+                    notification.remove();
+                    style.remove();
+                }, 300);
+            }, 4000);
+        }
+        
+        // =============================================
+        // SONS E EFEITOS
+        // =============================================
+        
+        function initAmbientSounds() {
+            // Esta função pode ser expandida para incluir sons ambiente
+            // Por enquanto, é apenas um placeholder
+        }
+        
+        function playSound(type) {
+            // Em um sistema real, você teria arquivos de áudio
+            // Esta é uma simulação com a Web Audio API
+            
+            if (typeof AudioContext !== 'undefined') {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                if (type === 'stone') {
+                    // Som de pedra sendo lascada
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.value = 800;
+                    oscillator.type = 'sawtooth';
+                    
+                    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.3);
+                    
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.3);
+                } else if (type === 'tool') {
+                    // Som de ferramenta sendo usada
+                    const oscillator1 = audioContext.createOscillator();
+                    const oscillator2 = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator1.connect(gainNode);
+                    oscillator2.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator1.frequency.value = 300;
+                    oscillator2.frequency.value = 450;
+                    oscillator1.type = 'sine';
+                    oscillator2.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0.05, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.5);
+                    
+                    oscillator1.start(audioContext.currentTime);
+                    oscillator2.start(audioContext.currentTime);
+                    oscillator1.stop(audioContext.currentTime + 0.5);
+                    oscillator2.stop(audioContext.currentTime + 0.5);
+                }
+            }
+        }
+        
+        // =============================================
+        // INTEGRAÇÃO COM O SISTEMA PRINCIPAL
+        // =============================================
+        
+        // Configurar mensagens para o sistema principal
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'getProgress') {
+                // Responder com o progresso atual
+                event.source.postMessage({
+                    type: 'chapterProgress',
+                    chapter: CHAPTER_NUMBER,
+                    progress: chapterProgress
+                }, event.origin);
+            }
+        });
+        
+        // Atualizar progresso ao rolar
+        let scrollProgressUpdated = false;
+        window.addEventListener('scroll', function() {
+            const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+            
+            if (scrollPercent > 50 && !scrollProgressUpdated) {
+                updateProgress(10);
+                scrollProgressUpdated = true;
+            }
+        });
+        
+        // =============================================
+        // EXPORTAR FUNÇÕES PARA CONFIGURAÇÃO
+        // =============================================
+        
+        window.configureChapter = function(config) {
+            // Função para configuração externa
+            if (config.nextChapter) {
+                window.nextChapterLink = config.nextChapter;
+            }
+            
+            if (config.prevChapter) {
+                window.prevChapterLink = config.prevChapter;
+            }
+            
+            console.log('Capítulo configurado com sucesso');
+        };
+    </script>
+</body>
+</html>
